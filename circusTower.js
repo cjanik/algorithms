@@ -14,7 +14,7 @@ var circusTower = function(performers) {
     performers[j+1] = current;
   } 
 
-  //Find the longest chain of performers where each weighs less than the next
+  //Find the longest chain of performers where each weighs less than the previous
   var towerBottom = towerTop =  0;
   var currentBottom = currentTop =  0;
 
