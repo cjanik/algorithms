@@ -24,7 +24,6 @@ var bstFromList = function(array) {
 
 };
 
-
 var treeNode = function(value) {
   
   this.value = value;
