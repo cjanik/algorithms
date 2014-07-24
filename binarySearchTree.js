@@ -30,13 +30,13 @@ binarySearchTree.prototype.contains = function(value) {
 
   if ( this.value === value ) { return true; }
 
-  if ( value < this.value )
+  if ( value < this.value ) {
     if ( this.left ) {
       return this.left.contains(value);
     } else {
       return false;
     }
-  } 
+  }
 
   if ( value > this.value ) {
     if ( this.right ) {
@@ -45,26 +45,113 @@ binarySearchTree.prototype.contains = function(value) {
       return false;
     }
   }
+
+  return false;
 };
 
-binarySearchTree.prototype.depthFirstLog = function(nodeList) {
+/**
+* Removal may throw an error depending on the size of the tree and the node being removed.  
+* This can easily be resolved by implementing promises, which I am not doing here.
+*/
+
+binarySearchTree.prototype.remove = function(value, parent, root) {
+  
+  if ( this.value === value ) {
+    var children = this.inOrderTraversal();
+    var removalIndex = binarySearch(children, this.value);
+    children.splice(removalIndex, 1);
+    if ( parent ) {
+      if ( parent.left === this ) {
+        parent.left = children.length > 0 ? bstFromList(children) : null;
+      } else {
+        parent.right = children.length > 0 ? bstFromList(children) : null;
+      }
+    } else {
+      if ( !root ) {
+        throw 'To delete root node, call remove with "null" and "true" as second and third parameters.  New tree will be returned.'
+      } else {
+        return bstFromList(children);
+      }
+    }
+  }
+
+  if ( value < this.value ) {
+    if ( this.left ) {
+      return this.left.remove(value, this);
+    } else {
+      return null;
+    }
+  }
+
+  if ( value > this.value ) {
+    if ( this.right ) {
+      return this.right.remove(value, this);
+    } else {
+      return null;
+    }
+  }
+
+  function bstFromList (array) {
+
+    if ( array.length === 0 ) { return null; }
+
+    var midIndex = array.length / 2 | 0;
+    var pivot = array[midIndex];
+    var tree = new binarySearchTree(pivot);
+
+    if ( array.length === 1 ) {
+      return tree;
+    }
+
+    var left = array.slice(0, midIndex);
+    var right = array.slice(midIndex + 1);
+
+    tree.left = bstFromList(left);
+    tree.right = bstFromList(right);
+
+    return tree;
+
+  };
+
+  function binarySearch (array, target){
+
+    var lower = 0;
+    var upper = array.length - 1;
+
+    while ( lower <= upper ) {
+      var mid = Math.floor((upper + lower) / 2);
+      if ( target < array[mid] ){
+        upper = mid - 1;
+      } else if ( target > array[mid] ) {
+        lower = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+
+    return  -1;
+  };
+
+};  
+
+binarySearchTree.prototype.depthFirstTraversal = function(nodeList) {
  
   nodeList = nodeList || [];
 
   nodeList.push(this.value);
 
   if ( this.left ) {
-    this.left.depthFirstLog(nodeList);
+    this.left.depthFirstTraversal(nodeList);
   }
 
   if ( this.right ) {
-    this.right.depthFirstLog(nodeList);
+    this.right.depthFirstTraversal(nodeList);
   }
 
   return nodeList;
 };
 
-binarySearchTree.prototype.breadthFirstLog = function() {
+binarySearchTree.prototype.breadthFirstTraversal = function() {
 
   var nodeList = [];
   var queue = [this];
@@ -86,7 +173,7 @@ binarySearchTree.prototype.breadthFirstLog = function() {
 binarySearchTree.prototype.inOrderTraversal = function(nodeList, parent) {
   
   nodeList = nodeList || [];
-  this.parent = this.parent || parent;
+  this.parent = this.parent || parent || null;
 
   this.leftChildTraversed = false;
   this.rightChildTraversed = false;
@@ -130,11 +217,15 @@ testTree.insert(44);
 /*
              22
             /  \
-          11    30  
-         /     /  \
-        9     25   41
-       /  \          \
-      7    8          44     
+           /    \
+          /      \
+         11      30  
+        / \     /  \
+       9  14   25  41
+      /     \        \
+     7      15       44     
+      \
+       8     
 */
 
 
