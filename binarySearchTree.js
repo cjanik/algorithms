@@ -171,7 +171,7 @@ binarySearchTree.prototype.breadthFirstTraversal = function() {
 binarySearchTree.prototype.inOrderTraversal = function(nodeList, parent) {
   
   nodeList = nodeList || [];
-  this.parent = this.parent || parent || null;
+  this.parent = this.parent || parent;
 
   this.leftChildTraversed = false;
   this.rightChildTraversed = false;
