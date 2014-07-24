@@ -49,12 +49,7 @@ binarySearchTree.prototype.contains = function(value) {
   return false;
 };
 
-/**
-* Removal method rebalances the tree below the point of removal.  This method may throw 
-* an error depending on the size of the tree and the node being removed.  This can easily 
-* be resolved by implementing promises, which I am not doing here.
-*/
-
+// Removes the node and rebalances the tree below the point at which is node is removed
 binarySearchTree.prototype.remove = function(value, parent, root) {
   
   if ( this.value === value ) {
@@ -64,8 +59,10 @@ binarySearchTree.prototype.remove = function(value, parent, root) {
     if ( parent ) {
       if ( parent.left === this ) {
         parent.left = children.length > 0 ? bstFromList(children) : null;
+        return value;
       } else {
         parent.right = children.length > 0 ? bstFromList(children) : null;
+        return value;
       }
     } else {
       if ( !root ) {
