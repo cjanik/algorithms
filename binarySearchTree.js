@@ -49,7 +49,7 @@ binarySearchTree.prototype.contains = function(value) {
   return false;
 };
 
-// Removes the node and rebalances the tree below the point at which is node is removed
+// Removes the node and rebalances the tree below the point at which it is removed
 binarySearchTree.prototype.remove = function(value, parent, root) {
   
   if ( this.value === value ) {
