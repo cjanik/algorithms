@@ -1,83 +1,87 @@
-// Given a NxN matrix which contains all distinct 1 to n^2 numbers, write code to print sequence 
-// of increasing adjacent sequential numbers.
+/*
+* Given an n^2 matrix which contains all distinct numbers, write a method to find the 
+* longest sequence of increasing sequential numbers.  Example:
+*
+* var myMatrix = [[1,4,5,6],[11,55,8,7],[3,12,9,88],[2,65,10,19]];
+*
+*  1     4     5     6
+*
+*  11    55    8     7
+*
+*  3     12    9     8
+*
+*  2     65    10    19
+*
+* Should return [4,5,6,7,8,9,10]
+*/ 
+
 
 var matrixSequence = function(matrix) {
 
   var n = matrix.length;
-  var results = [];
+  var result = [matrix[0][0]];
 
   var findSequence = function(position, visited, sequence) {
 
-    console.log(position, visited, sequence);
-
-    var row, column;
-    var newPosition;
-    var value = matrix[position[0]][position[1]];
     visited = visited || {};
     visited[position] = true;
+
     sequence = sequence || [];
+    var value = matrix[position[0]][position[1]];
     sequence.push(value);
-
+    
+    var nextPosition = [];
     // move up
-    row = position[1] - 1;
-    column = position[0];
-    newPosition = [row, column];  
-
-    if ( row >= 0 && !visited[newPosition] ) {
-      if ( value + 1 === matrix[row][column] ) {
+    nextPosition[0] = position[0] - 1;
+    nextPosition[1] = position[1];
+    if ( nextPosition[0] >= 0 && !visited[nextPosition] ) {
+      if ( value + 1 === matrix[nextPosition[0]][nextPosition[1]] ) {
         visited[position] = true;
-        findSequence(newPosition, visited, sequence);
+        findSequence(nextPosition, visited, sequence, value);
       }
     }
 
     // move down  
-    row = position[1] + 1;
-    column = position[0]; 
-    newPosition = [row, column];
-    if ( row < n  && !visited[newPosition] ) {
-      if ( value + 1 === matrix[row][column] ) {
+    nextPosition[0] = position[0] + 1;
+    nextPosition[1] = position[1]; 
+    if ( nextPosition[0] < n  && !visited[nextPosition] ) {
+      if ( value + 1 === matrix[nextPosition[0]][nextPosition[1]] ) {
         visited[position] = true;
-        findSequence(newPosition, visited, sequence);
+        findSequence(nextPosition, visited, sequence, value);
       }
     }
 
     // move left  
-    row = position[1];
-    column = position[0] - 1;
-    newPosition = [row, column]; 
-    if ( column >= 0  && !visited[newPosition] ) {
-      if ( value + 1 === matrix[row][column] ) {
+    nextPosition[0] = position[0];
+    nextPosition[1] = position[1] - 1;
+    if ( nextPosition[1] >= 0  && !visited[nextPosition] ) {
+      if ( value + 1 === matrix[nextPosition[0]][nextPosition[1]] ) {
         visited[position] = true;
-        findSequence(newPosition, visited, sequence);
+        findSequence(nextPosition, visited, sequence, value);
       }
     }
 
     // move right  
-    row = position[1];
-    column = position[0] + 1; 
-    newPosition = [row, column];
-    if ( column < n && !visited[newPosition] ) {
-      if ( value + 1 === matrix[row][column] ) {
+    nextPosition[0] = position[0];
+    nextPosition[1] = position[1] + 1; 
+    if ( nextPosition[1] < n && !visited[nextPosition] ) {
+      if ( value + 1 === matrix[nextPosition[0]][nextPosition[1]] ) {
         visited[position] = true;
-        findSequence(newPosition, visited, sequence);
+        findSequence(nextPosition, visited, sequence, value);
       }
     }
 
-    results.push(sequence);
+    if ( sequence.length > result.length ) {
+      result = sequence;
+    }
+
   };
 
   for ( var i = 0; i < n; i++ ) {
-    for ( var j = 0; j < n; j++ ) {
+    for ( var j = 0; j < n; j++ ) { 
       findSequence([i,j]);
     }
   }
 
-  return results;
+  return result;
 };
-
-// 1 5 9 
-// 2 3 8 
-// 4 6 7 
-
-// should print 
-// 6 7 8 9
