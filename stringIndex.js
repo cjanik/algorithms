@@ -11,23 +11,38 @@
 
 var stringIndex = function(string) {
 
-  if ( string.length === 0 ) { return 0;}
-
   var dict = ['','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','q','x','y','z'];
   
+  if ( string.length < 2 ) { return dict.indexOf(string); }
+  
   var len = string.length;
-  if ( len === 1 ) { return dict.indexOf(string); }
+  var index = 0;
+  var first = string[0];
 
-  var baseIndex = buildIndex(dict.indexOf(string[0]));
-  var minorIndex = dict.indexOf(string[1]) - dict.indexOf(string[0]);
+  for ( var i = 0; i < len; i++ ) {
+    if ( i === len - 1 ) { 
+      index += dict.indexOf(string[i]) - dict.indexOf(string[i - 1]);
+    } else if ( i === len - 2 ) {
+      index += buildIndex(dict.indexOf(string[i]), dict.length - 1 - i);
+    } 
+    else {
+      index += buildIndex(dict.indexOf(string[i]), dict.length - i);
+    }
+  }
 
-  var index = baseIndex + minorIndex;
+  // var baseIndex = buildIndex(dict.indexOf(string[0]) - );
+  // var minorIndex = dict.indexOf(string[1]) - dict.indexOf(string[0]);
 
-  function buildIndex(n){
+  // var index = baseIndex + minorIndex;
+
+  function buildIndex(n, start){
+
+    start = start || 26;
+
+    console.log('here', n, start)
     var result = 0;
-    var current = dict.length - 1;
     while (n--) {
-      result += current--;
+      result += start--;
     }
     return result;
   }
@@ -35,3 +50,16 @@ var stringIndex = function(string) {
   return index;
 
 };
+
+// var sumToN = function(n) {
+
+//   var result = 0;
+//   n+=1;
+
+//   while (n--) {
+//     result += n;
+//   }
+
+//   return result;
+
+// }

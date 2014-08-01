@@ -7,7 +7,7 @@ var permutations = function(string) {
 
   var permute = function(input, chars) {
 
-    chars = chars =[];
+    chars = chars || [];
 
     for ( var i = 0; i < input.length; i++ ) {
       var ch = input.splice(i, 1)[0];
