@@ -15,7 +15,7 @@ var permutations = function(string) {
       if ( input.length === 0 ) { 
         results.push(chars.join(''));
       }
-      permute(input);
+      permute(input, chars);
       input.splice(i, 0, ch);
       chars.pop();
     }
