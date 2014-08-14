@@ -200,6 +200,22 @@ binarySearchTree.prototype.inOrderTraversal = function(nodeList, parent) {
   }
 }
 
+binarySearchTree.prototype.findMaxDepth = function(currentDepth, maxDepth) {
+
+  maxDepth = maxDepth || 1;
+  currentDepth = currentDepth || maxDepth;
+
+  if ( this.left ) {
+    maxDepth = this.left.findMaxDepth(currentDepth + 1, maxDepth);
+  }
+
+  if ( this.right ) {
+    maxDepth = this.right.findMaxDepth(currentDepth + 1, maxDepth);
+  }
+  
+  return currentDepth > maxDepth ? currentDepth : maxDepth;
+}
+
 var testTree = new binarySearchTree(22);
 testTree.insert(11);
 testTree.insert(30);
