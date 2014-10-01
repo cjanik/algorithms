@@ -1,24 +1,45 @@
 
-var insertionSort = function(list) {
 
-  var value, i, j;
+var spiralTraversal = function(matrix){
 
-  for ( i = 0; i < list.length; i++ ) {
-    value = list[i];
+  var minRowIndex = 0;
+  var maxRowIndex = matrix.length - 1;
+  var minColIndex = 0;
+  var maxColIndex = matrix[0].length - 1;
 
-    for ( j = i - 1; j > -1 && list[j] > value; j-- ){
-      list[j+1] = list[j];
+  while ( minRowIndex <= maxRowIndex && minColIndex <= maxColIndex ) {
+
+    //Left-to-right traversal
+    for ( var i = minColIndex; i <= maxColIndex; i++ ) {
+      console.log(matrix[minRowIndex][i]);
+    }
+    minRowIndex++ ;
+        
+    //Downward traversal
+    for ( var j = minRowIndex; j <= maxRowIndex; j++ ) {
+      console.log(matrix[j][maxColIndex]);
+    }
+    maxColIndex--;
+
+    //Right-to-left traversal
+    if ( minColIndex <= maxColIndex ) { // Need to catch exception prior to while loop
+      for (var k = maxColIndex; k >= minColIndex; k-- ) {
+        console.log(matrix[maxRowIndex][k]);
+      }
+      maxRowIndex--;
     }
 
-    list[j + 1] = value;
+    //Upward traversal
+    if ( minRowIndex <= maxRowIndex ) { // Need to catch exception prior to while loop
+      for ( var l = maxRowIndex; l >= minRowIndex; l-- ) {
+        console.log(matrix[l][minColIndex]);
+      }
+      minColIndex++;
+    }
   }
-
-  return list;
 
 };
 
-var a = [16,7,234,2,5,7];
+var matrix = [[11,12,13,14,15],[21,22,23,24,25],[31,32,33,34,35],[41,42,43,44,45]];
 
-console.log(insertionSort(a));
-
-
+spiralTraversal(matrix);
