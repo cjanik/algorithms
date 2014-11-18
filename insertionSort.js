@@ -1,45 +1,20 @@
 
+function insertionSort(array) {
 
-var spiralTraversal = function(matrix){
+  if ( array.length < 2 ) { return array; }
 
-  var minRowIndex = 0;
-  var maxRowIndex = matrix.length - 1;
-  var minColIndex = 0;
-  var maxColIndex = matrix[0].length - 1;
-
-  while ( minRowIndex <= maxRowIndex && minColIndex <= maxColIndex ) {
-
-    //Left-to-right traversal
-    for ( var i = minColIndex; i <= maxColIndex; i++ ) {
-      console.log(matrix[minRowIndex][i]);
+  for (var i = 0; i < array.length; i++) {
+    var current = array[i];
+    for (var j = i - 1; j >= 0 && array[j] > current; j--) {
+      array[j+1] = array[j];
     }
-    minRowIndex++ ;
-        
-    //Downward traversal
-    for ( var j = minRowIndex; j <= maxRowIndex; j++ ) {
-      console.log(matrix[j][maxColIndex]);
-    }
-    maxColIndex--;
-
-    //Right-to-left traversal
-    if ( minColIndex <= maxColIndex ) { // Need to catch exception prior to while loop
-      for (var k = maxColIndex; k >= minColIndex; k-- ) {
-        console.log(matrix[maxRowIndex][k]);
-      }
-      maxRowIndex--;
-    }
-
-    //Upward traversal
-    if ( minRowIndex <= maxRowIndex ) { // Need to catch exception prior to while loop
-      for ( var l = maxRowIndex; l >= minRowIndex; l-- ) {
-        console.log(matrix[l][minColIndex]);
-      }
-      minColIndex++;
-    }
+    array[j+1] = current;
   }
 
-};
+  return array;
 
-var matrix = [[11,12,13,14,15],[21,22,23,24,25],[31,32,33,34,35],[41,42,43,44,45]];
+}
 
-spiralTraversal(matrix);
+var testArray = [324,23,230,56,234,456,2,3,111,24]
+
+console.log(insertionSort(testArray));

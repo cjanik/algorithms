@@ -20,3 +20,4 @@ var powerSet = function(string) {
 };
 
 console.log(powerSet('abcd'));
+
