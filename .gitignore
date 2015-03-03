@@ -1,1 +1,5 @@
 .DS_Store
+.gitignore
+binarySearchTree.js
+checkWriter.js
+circusTower.js
