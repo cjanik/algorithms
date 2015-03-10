@@ -1,5 +1,5 @@
 /*
-Buy 1 beer for each person who attends your party. Beer is sold in units of 1, 6, 12, and 24.
+Buy 1 beer for each person who attends your party. Beer is sold in units of 1, 6, 12, and 24. Or make up your own units as long as you have singles.
 
 Given the number of people attending the party, determine all possible combinations of beer units that will result in the correct number of beers total.
 
@@ -17,54 +17,52 @@ expected output -
 12: 2, 1: 1;
 24: 1, 1: 1;
 
-floor( 25 / 24 ) == 1
-floor( 25 / 12 ) == 2
-floor( 25 / 6 )  == 4
-floor( 25 / 1 )  == 25
-
-floor( 25 / 24 ) + 25 % 24 == 25
-floor( 25 / 12 ) + 25 % 12 == 25
-
-recursive - 
-input units and numPeople
-
-need a base case -
-add one
-
-work from largest unit. so 25 / 24 is > 1, pass the rest to recursion with fewer units [12, 6, 1] with remaining numPeople == 1
-
-can't use 12, call buyBeer [6,1] with 1 numPeople
-
-can't use 6, call buyBeer with [1] with 1 numPeople
-
-6 - can use 1, 2, 3, or 4, so return {{6: 1, buyBeer...}, {6: 2, buyBeer}, {6: 3, buyBeer}...}
-126 
-
-base case: fill remaining required numPeople with largest unit [1]
-
-
 */
 
-function buyBeer( units, numPeople ) {
-	numUnits = units.length;
-	unitZero = units[0];
 
-	console.log( units );
+var beerForParty = function( units, numPeople) {
 
-	if( numUnits === 1 && numPeople === 1){
-		return {1: 1};
-	} else if ( numUnits === 1){
-		return {1: 1, link: buyBeer(units, numPeople - 1)};
-	} else if ( 2 > numPeople / units[0] > 1 ) {
-		return { unitValue: 1, link: buyBeer( units.slice(1), numPeople - units[0])};
-	} else if ( numPeople / units[0] > 2 ) {
-		return { unitValue: Math.floor( numPeople / units[0] ), buyBeer( units, numPeople - units[0] )};
+	if ( units == null || numPeople == null || units.length == 0 || numPeople < 1){
+		return 'Expected array of units [24, 12, 6, 1], and positive numPeople';
 	}
 
+	units.sort( function(a,b){ return b - a; });
+
+	var results = [],
+		counter = {};
+
+	var buyBeer = function( units, numPeople, counter){
+
+		if( units.length == 1 && units[0] <= numPeople){
+			counter[ units[0] ] = ( counter[ units[0] ] || 0 ) + numPeople / units[0];
+			results.push( counter );
+
+		} else if ( units.length > 1 && units[0] <= numPeople){
+
+			for( var i = 1; i <= Math.floor( numPeople / units[0] ); i++){
+				var newCounter = {};
+				for( prop in counter){
+					if ( counter.hasOwnProperty( prop) ){
+						newCounter[prop] = counter[prop];
+					}
+				}
+				newCounter[ units[0] ] =  i;
+				buyBeer( units.slice(1), numPeople - i * units[0], newCounter);
+			}
+			buyBeer( units.slice(1), numPeople, counter);
+
+		} else {
+			buyBeer( units.slice(1), numPeople, counter);
+
+		}
+	}
+
+	buyBeer( units, numPeople, counter);
+	return results;
 
 }
 
-conosole.log( buyBeer( [24, 12, 6, 1], 25) );
+console.log( beerForParty( [24, 6, 12, 1], 25) );
 
 
 
