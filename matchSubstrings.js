@@ -12,14 +12,17 @@ const matchSubstrings = (first, second) => {
     }
 
     let numMatches = 0;
+    // Set data structure ensures unique entries
     const subStrings = new Set();
-    for (i = 0; i < short.length; i++) {
-        for (j = 1; i + j <= short.length; j++) {
+    for (let i = 0; i < short.length; i++) {
+        // make sure to start second pointer at index 1 to avoid an invalid match
+        // ('string').substring(0,0) returns '', and ('string').indexOf('') returns 0
+        for (let j = 1; i + j <= short.length; j++) {
             subStrings.add(short.substring(i, i + j));
         }
     }
     for (let sub of subStrings) {
-        if (second.indexOf(sub) > -1) numMatches++;
+        if (long.indexOf(sub) > -1) numMatches++;
     }
     console.log('matches: ', numMatches, ' subs: ', subStrings);
 }
